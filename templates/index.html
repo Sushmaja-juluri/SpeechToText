@@ -1,26 +1,152 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Speech To Text</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1020">
+  <title>Voxly — Speech to Text & NLP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
 
-    <div class="container">
-        <h1>Speech To Text using NLP</h1>
-
-        <p>Welcome to the Speech-to-Text Project</p>
-
-        <button id="recordBtn">
-            Start Recording
-        </button>
-
-        <h3>Output</h3>
-
-        <textarea id="output" rows="8" cols="60"></textarea>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Voxly home">
+      <span class="brand-mark">V</span>
+      <span>voxly<span class="brand-dot">.</span></span>
+    </a>
+    <div class="topbar-right">
+      <span class="status-pill"><span class="status-dot"></span> AI workspace</span>
+      <span class="avatar">ST</span>
     </div>
+  </header>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <main class="page-shell">
+    <section class="hero">
+      <div class="eyebrow"><span class="eyebrow-line"></span> SPEECH INTELLIGENCE STUDIO</div>
+      <h1>Your voice,<br><span class="gradient-text">understood.</span></h1>
+      <p class="hero-copy">Turn spoken words into text and uncover the meaning behind every sentence with intelligent language analysis.</p>
+    </section>
 
+    <section class="workspace">
+      <div class="section-heading">
+        <div>
+          <span class="step-label">01 / CAPTURE</span>
+          <h2>Voice to text</h2>
+        </div>
+        <span class="live-label"><span class="live-dot"></span> READY WHEN YOU ARE</span>
+      </div>
+
+      <div class="capture-grid">
+        <div class="record-card panel">
+          <div class="record-orbit orbit-a"></div>
+          <div class="record-orbit orbit-b"></div>
+          <div class="mic-wrap" id="micWrap">
+            <button id="recordBtn" class="mic-button" type="button" aria-label="Start recording">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2.5" width="6" height="12" rx="3"></rect><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3.5M8.5 21.5h7"></path></svg>
+            </button>
+          </div>
+          <h3 id="recordTitle">Ready to listen?</h3>
+          <p id="recordHint">Tap the microphone and start speaking naturally.</p>
+          <div class="record-actions">
+            <button id="stopBtn" class="button button-muted" type="button" disabled>Stop recording</button>
+            <select id="languageSelect" class="language-select" aria-label="Speech language">
+              <option value="en-US">English (US)</option>
+              <option value="en-GB">English (UK)</option>
+              <option value="en-IN">English (India)</option>
+              <option value="hi-IN">Hindi</option>
+            </select>
+          </div>
+          <div id="recordStatus" class="record-status" role="status">Microphone is off</div>
+        </div>
+
+        <div class="transcript-card panel">
+          <div class="card-topline">
+            <div>
+              <span class="mini-label">YOUR TRANSCRIPTION</span>
+              <h3>Transcript</h3>
+            </div>
+            <span class="editable-tag">EDITABLE</span>
+          </div>
+          <textarea id="output" placeholder="Your transcribed words will appear here. You can also type or paste text to analyse it..." spellcheck="true"></textarea>
+          <div class="transcript-footer">
+            <span id="characterCount">0 characters</span>
+            <div class="inline-actions">
+              <button id="clearBtn" class="text-button" type="button">Clear</button>
+              <button id="analyzeBtn" class="button button-primary" type="button">
+                Analyse text <span aria-hidden="true">↗</span>
+              </button>
+            </div>
+          </div>
+          <p id="message" class="message" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="results-section" id="resultsSection">
+      <div class="section-heading results-heading">
+        <div>
+          <span class="step-label">02 / UNDERSTAND</span>
+          <h2>Language insights</h2>
+        </div>
+        <span class="results-note">POWERED BY NLP</span>
+      </div>
+
+      <div class="stats-grid">
+        <article class="stat-card panel">
+          <span class="stat-icon violet">Aa</span>
+          <span class="stat-label">Total words</span>
+          <strong id="wordCount">—</strong>
+          <span class="stat-foot">Words in your transcript</span>
+        </article>
+        <article class="stat-card panel">
+          <span class="stat-icon blue">#</span>
+          <span class="stat-label">Tokens</span>
+          <strong id="tokenCount">—</strong>
+          <span class="stat-foot">Words and punctuation units</span>
+        </article>
+        <article class="stat-card panel">
+          <span class="stat-icon pink">✦</span>
+          <span class="stat-label">Named entities</span>
+          <strong id="entityCount">—</strong>
+          <span class="stat-foot">People, places and more</span>
+        </article>
+      </div>
+
+      <div class="analysis-grid">
+        <article class="analysis-card panel">
+          <div class="analysis-title"><div><span class="mini-label">01</span><h3>Word frequency</h3></div><span class="title-symbol">↗</span></div>
+          <div id="frequencyList" class="frequency-list"><p class="empty-state">Your most-used words will appear here.</p></div>
+        </article>
+        <article class="analysis-card panel">
+          <div class="analysis-title"><div><span class="mini-label">02</span><h3>Named entities</h3></div><span class="title-symbol">◇</span></div>
+          <div id="entitiesList" class="chip-list"><p class="empty-state">Detected names, places and organisations will appear here.</p></div>
+        </article>
+        <article class="analysis-card panel">
+          <div class="analysis-title"><div><span class="mini-label">03</span><h3>Parts of speech</h3></div><span class="title-symbol">Aa</span></div>
+          <div id="posList" class="data-list"><p class="empty-state">Grammar tags will appear here.</p></div>
+        </article>
+        <article class="analysis-card panel">
+          <div class="analysis-title"><div><span class="mini-label">04</span><h3>Word forms</h3></div><span class="title-symbol">⌁</span></div>
+          <div class="word-form-columns">
+            <div><span class="sub-label">LEMMAS</span><div id="lemmasList" class="word-cloud"><span class="empty-state">—</span></div></div>
+            <div><span class="sub-label">STOP WORDS</span><div id="stopwordsList" class="word-cloud"><span class="empty-state">—</span></div></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <a class="brand footer-brand" href="/"><span class="brand-mark">V</span><span>voxly<span class="brand-dot">.</span></span></a>
+      <span>Made for ideas worth hearing.</span>
+      <span class="footer-tech">SPEECH RECOGNITION · SPACY NLP</span>
+    </footer>
+  </main>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
