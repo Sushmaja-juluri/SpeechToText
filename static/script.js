@@ -197,7 +197,10 @@ async function analyzeText() {
     const response = await fetch("/analyze", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text })
+      body: JSON.stringify({
+        text: text,
+        language: languageSelect.value
+      })
     });
     if (!response.ok) throw new Error(`Server returned ${response.status}`);
     const data = await response.json();
